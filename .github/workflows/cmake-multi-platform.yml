@@ -1,41 +1,37 @@
-name: Build Custom PvZ Toolkit
+name: Build PvZ Toolkit for Mod
 
 on:
   push:
     branches: [ "master", "main" ]
-  pull_request:
-    branches: [ "master", "main" ]
+  workflow_dispatch:
 
 jobs:
-  build-windows:
+  build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-    - name: Set up MSBuild & MSVC
+    - name: Set up MSVC x86 Environment
       uses: microsoft/setup-msbuild@v2
 
-    - name: Download & Install FLTK and zlib
+    - name: Install vcpkg Dependencies
       run: |
-        # Download pre-built/static structures needed for PvZ Toolkit
-        mkdir C:\Dev
-        Invoke-WebRequest -Uri "https://github.com" -OutFile C:\Dev\instructions.md
-        # Note: The codebase looks for FLTK_DIR inside standard static folders. 
-        # For a rapid cloud bypass, we force CMake to download the requirements directly:
-        
+        vcpkg install fltk:x86-windows zlib:x86-windows
+
     - name: Configure CMake
       run: |
         mkdir build
         cd build
-        cmake -G "Visual Studio 17 2022" -A x86 -DCMAKE_BUILD_TYPE=MinSizeRel ..
+        cmake -G "Visual Studio 17 2022" -A Win32 -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" ..
 
-    - name: Build Project
+    - name: Compile Application
       run: |
-        cmake --build build --config MinSizeRel
+        cmake --build build --config Release
 
-    - name: Upload Finished Executable
+    - name: Upload Executable Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Custom-PvZ-Toolkit
-        path: build/MinSizeRel/*.exe
+        path: build/Release/*.exe
