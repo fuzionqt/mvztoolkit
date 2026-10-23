@@ -121,6 +121,7 @@ bool PvZ::FindPvZ()
         L"Bloom & Doom BETA 0.1.1.1014",       //
         L"Plants vs. Zombies BETA 0.9.9.1029", //
 #endif
+        L"Monkeys vs. Zombies: 2x speed",         //
         L"Plants vs. Zombies",                    //
         L"Plants vs. Zombies 1.2.0.1073",         //
         L"Plants vs. Zombies 1.2.0.1073 RELEASE", //
