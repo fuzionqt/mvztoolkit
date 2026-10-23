@@ -13,8 +13,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up MSVC x86 Environment
-      uses: microsoft/setup-msbuild@v2
+    - name: Enable Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
 
     - name: Install vcpkg Dependencies
       run: |
